@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -33,7 +34,7 @@ class UserController extends Controller
       
 
         return view('backoffice.user.edit',compact('user'));
-            
+        
        
     }
 
@@ -41,7 +42,13 @@ class UserController extends Controller
     //FUNCTION UPDATE 
 
     public function update(Request $request,User $user){
-        
+        $request->validate([
+            "nom" => 'required',
+            "prenom" => 'required',
+            "age" => 'required',
+            "email" => 'required',
+            "mdp" =>'required',
+        ]);
         
         // les request vont permettre d'indiquer les noms manquants
 
@@ -50,10 +57,14 @@ class UserController extends Controller
         $user->age = $request->age;
         $user->email = $request->email;
         $user->mdp = $request->mdp;
-        $user->pdp = $request->pdp;
+        Storage::disk('public')->delete('img/'.$user->pdp);
+    
+        $user->pdp = $request->file("pdp")->hashName();
 
         $user->save();
-        return redirect()->route('user');   
+        $request->file('pdp')->storePublicly("img", "public");
+        return redirect()->route('user.index');   
+        
     }
     
 //  FUNCTION CREATE : créer un nouvel utilisateur
@@ -82,6 +93,7 @@ public function store(Request $request){
         "age" => 'required',
         "email" => 'required',
         "mdp" =>'required',
+        "pdp" => 'required'
        
 
     ]);
@@ -97,7 +109,8 @@ public function store(Request $request){
     $user->pdp = $request->file("pdp")->hashName();
 
     $user->save();
-    $request->file("pdp")->storePublicly("img/" . $user->pdp);
+   
+    $request->file("pdp")->storePublicly("img", "public");
     
     return redirect()->route('user.index');
 }

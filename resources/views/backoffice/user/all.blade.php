@@ -28,9 +28,10 @@
                         <td>{{ $user->mdp }}</td>
                         <td>{{ $user->pdp }}</td>
                         <td>
-                            <a href="/users/{{ $user->id }}/edit">Edit</a>
-                            <form action="/users/{{ $user->id }}/delete" method="POST">
+                            <a href="/user/{{ $user->id }}/edit">Edit</a>
+                            <form action="/user/{{ $user->id }}" method="POST">
                                 @csrf
+                                @method('delete')
                                 <button class="bg-danger" type="submit" >Delete</button>
                             </form>
                        </td>

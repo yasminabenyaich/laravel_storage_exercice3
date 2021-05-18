@@ -34,13 +34,13 @@
         </div>
         <div class="mb-3">
             <label  class="form-label">password</label>
-            <input type="text" class="form-control" value="{{ $user->password }}" name="password">
+            <input type="text" class="form-control" value="{{ $user->mdp }}" name="mdp">
         </div>
         <div class="mb-3">
             <label  class="form-label">photo</label>
-            <input type="file" class="form-control" value="{{ $user->photo }}" name="photo">
+            <input type="file" class="form-control" value="{{ $user->pdp }}" name="pdp">
         </div>
-        <button type="submit" class="btn btn-secondary text-white my-3">Submit</button>
+        <button type="submit" class="btn btn-dark text-white my-3">Submit</button>
     </form>
   
 </section>
