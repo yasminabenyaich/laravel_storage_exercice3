@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Galerie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GalerieController extends Controller
 {
@@ -14,7 +15,9 @@ class GalerieController extends Controller
      */
     public function index()
     {
-        //
+        $galerie= Galerie::all();
+
+         return view('backoffice.galerie.all',compact('galerie'));
     }
 
     /**
@@ -24,7 +27,7 @@ class GalerieController extends Controller
      */
     public function create()
     {
-        //
+        return view ('backoffice.galerie.create');
     }
 
     /**
@@ -35,7 +38,21 @@ class GalerieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "nom"=> 'required',
+            "image"=>'required',
+            "description" => 'required'
+        ]);
+        
+        $galerie = new Galerie;
+
+        $galerie->nom= $request->nom;
+        $galerie->image= $request->image;
+        $galerie->description= $request-> description;
+
+        $galerie->save();
+
+        return redirect()->route('galeries');
     }
 
     /**
@@ -46,7 +63,7 @@ class GalerieController extends Controller
      */
     public function show(Galerie $galerie)
     {
-        //
+        return view('partials.galerie.show',compact('galerie'));
     }
 
     /**
@@ -57,7 +74,7 @@ class GalerieController extends Controller
      */
     public function edit(Galerie $galerie)
     {
-        //
+        return view('backoffice.galerie.edit',compact('galerie'));
     }
 
     /**
@@ -69,7 +86,9 @@ class GalerieController extends Controller
      */
     public function update(Request $request, Galerie $galerie)
     {
-        //
+        $galerie->nom = $request->nom;
+        $galerie->image =$request->image;
+        $galerie->description =$request->description;
     }
 
     /**
@@ -80,6 +99,15 @@ class GalerieController extends Controller
      */
     public function destroy(Galerie $galerie)
     {
-        //
+        $galerie->delete();
+
+        return redirect()->back();
+    
+    }
+
+    public function download ($id){
+
+        $galerie= Galerie::find($id);
+        Storage::disk('public')->download('img/'.$galerie->image);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Portfolio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PortfolioController extends Controller
 {
@@ -14,7 +15,9 @@ class PortfolioController extends Controller
      */
     public function index()
     {
-        //
+        $portfolio= Portfolio::all();
+        
+        return view('backoffice.portfolio.all',compact('portfolio'));
     }
 
     /**
@@ -24,7 +27,7 @@ class PortfolioController extends Controller
      */
     public function create()
     {
-        //
+        return view('backoffice.portfolio.create');
     }
 
     /**
@@ -35,7 +38,24 @@ class PortfolioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "nom"=>'required',
+            "image"=>'required',
+            "categorie"=> 'required',
+            "description"=>'required'
+        ]);
+
+        $portfolio = new Portfolio;
+
+        $portfolio->nom= $request->nom;
+        $portfolio->image= $request->image;
+        $portfolio->categorie= $request->categorie;
+        $portfolio->description= $request-> description;
+
+        $portfolio->save();
+
+        return redirect()->route('portfolios');
+        
     }
 
     /**
@@ -46,7 +66,7 @@ class PortfolioController extends Controller
      */
     public function show(Portfolio $portfolio)
     {
-        //
+        return view('partials.portfolio.show',compact('portfolio'));
     }
 
     /**
@@ -57,7 +77,7 @@ class PortfolioController extends Controller
      */
     public function edit(Portfolio $portfolio)
     {
-        //
+        return view('backoffice.portfolio.edit',compact('portfolio'));
     }
 
     /**
@@ -69,7 +89,12 @@ class PortfolioController extends Controller
      */
     public function update(Request $request, Portfolio $portfolio)
     {
-        //
+        $portfolio->nom = $request->nom;
+        $portfolio->image =$request->image;
+        $portfolio->categorie =$request->categorie;
+        $portfolio->description =$request->description;
+
+        
     }
 
     /**
@@ -80,6 +105,14 @@ class PortfolioController extends Controller
      */
     public function destroy(Portfolio $portfolio)
     {
-        //
+        $portfolio->delete();
+
+        return redirect()->back();
+    }
+
+    public function download ($id){
+
+        $portfolio= Portfolio::find($id);
+        Storage::disk('public')->download('img/'.$portfolio->image);
     }
 }

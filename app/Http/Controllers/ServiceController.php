@@ -14,7 +14,9 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        $service= Service::all();
+
+        return view('backoffice.service.all',compact('service'));
     }
 
     /**
@@ -24,7 +26,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        //
+        return view('backoffice.services.create');
     }
 
     /**
@@ -35,7 +37,22 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "nom" =>'required',
+            "icone" => 'required',
+            "description" => 'required'
+
+        ]);
+
+        $service = new Service;
+
+        $service->nom = $request->nom;
+        $service->icone = $request->icone;
+        $service->description = $request->description;
+
+        $service->save();
+
+        return redirect()->route('services');
     }
 
     /**
@@ -46,7 +63,8 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        //
+        
+        return view('partials.services.show',compact('service'));
     }
 
     /**
@@ -57,7 +75,7 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        //
+        return view('backoffice.service.edit',compact('service'));
     }
 
     /**
@@ -69,7 +87,9 @@ class ServiceController extends Controller
      */
     public function update(Request $request, Service $service)
     {
-        //
+        $service->nom = $request->nom;
+        $service->icone = $request->icone;
+        $service->description =$request->icone;
     }
 
     /**
@@ -80,6 +100,10 @@ class ServiceController extends Controller
      */
     public function destroy(Service $service)
     {
-        //
+        $service->delete();
+
+        return redirect()->back();
+
     }
+   
 }

@@ -14,7 +14,10 @@ class CaracteristiqueController extends Controller
      */
     public function index()
     {
-        //
+        $caracteristique= Caracteristique::all();
+
+        return view('backoffice.caracteristique.all',compact('caracteristique'));
+
     }
 
     /**
@@ -24,7 +27,7 @@ class CaracteristiqueController extends Controller
      */
     public function create()
     {
-        //
+        return view ('backoffice.caracteristique.create');
     }
 
     /**
@@ -35,7 +38,20 @@ class CaracteristiqueController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "nom"=>'required',
+            "icone"=>'required',
+            "chiffre"=> 'required'
+        ]);
+        $caracteristique = new Caracteristique;
+
+        $caracteristique->nom= $request->nom;
+        $caracteristique->icone= $request->icone;
+        $caracteristique->chiffre= $request->chiffre;
+
+        $caracteristique->save();
+        
+        return redirect()->route('caracteristiques');
     }
 
     /**
@@ -46,7 +62,7 @@ class CaracteristiqueController extends Controller
      */
     public function show(caracteristique $caracteristique)
     {
-        //
+        return view('partials.galerie.show',compact('caracteristique'));
     }
 
     /**
@@ -57,7 +73,7 @@ class CaracteristiqueController extends Controller
      */
     public function edit(caracteristique $caracteristique)
     {
-        //
+        return view('backoffice.caracteristique.edit',compact('caracteristique'));
     }
 
     /**
@@ -69,7 +85,10 @@ class CaracteristiqueController extends Controller
      */
     public function update(Request $request, caracteristique $caracteristique)
     {
-        //
+        $caracteristique->nom = $request->nom;
+        $caracteristique->icone =$request->icone;
+        $caracteristique->chiffre =$request->chiffre;
+
     }
 
     /**
@@ -80,6 +99,9 @@ class CaracteristiqueController extends Controller
      */
     public function destroy(caracteristique $caracteristique)
     {
-        //
+        $caracteristique->delete();
+
+        return redirect()->back();
     }
+   
 }
