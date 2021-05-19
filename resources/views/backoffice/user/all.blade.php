@@ -26,7 +26,7 @@
                         <td>{{ $user->age }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->mdp }}</td>
-                        <td>{{ $user->pdp }}</td>
+                        <td><img src={{ asset('img/'.$user->pdp) }} alt=""></td>
                         <td>
                             <a href="/user/{{ $user->id }}/edit">Edit</a>
                             <form action="/user/{{ $user->id }}" method="POST">

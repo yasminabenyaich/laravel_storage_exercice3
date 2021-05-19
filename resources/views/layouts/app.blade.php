@@ -8,6 +8,7 @@
     <title>Exo3 storage</title>
 </head>
 <body>
+   
     @yield('content')
     <script  src={{ asset("js/app.js") }}></script>
 </body>
